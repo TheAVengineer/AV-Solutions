@@ -470,9 +470,28 @@ Common errors to AVOID:
   • Use "хубав" / "добър" (not Russian forms)
   • Use "благодаря" (not Russian "спасибо")
   • Use "здравей" / "здравейте" (not Russian "привет")
-If unsure of a word's Bulgarian form, rephrase rather than guess.`
+If unsure of a word's Bulgarian form, rephrase rather than guess.
+
+UI LABELS — when directing the visitor to navigate the site, use the EXACT label names shown below (NOT the English originals):
+  • The button in the top navigation is labeled "Свържи се с нас" (NOT "Get In Touch")
+  • The contact section is labeled "Контакт" (NOT "Contact")
+  • The services section is labeled "Услуги" (NOT "Services")
+  • The how-it-works section is labeled "Как работи" (NOT "How It Works")
+  • The FAQ section is labeled "ЧЗВ" (NOT "FAQ")
+  • The home link is labeled "Начало" (NOT "Home")
+Example: instead of "Click 'Get In Touch'", say "Кликнете на 'Свържи се с нас'".`
       : replyLocale === "de"
-      ? "\n\nLANGUAGE INSTRUCTIONS:\nThe visitor is writing in German. Reply in fluent, native-quality German (Deutsch). Use proper German grammar including correct article gender (der/die/das) and case endings."
+      ? `\n\nLANGUAGE INSTRUCTIONS:
+The visitor is writing in German. Reply in fluent, native-quality German (Deutsch). Use proper German grammar including correct article gender (der/die/das) and case endings.
+
+UI LABELS — when directing the visitor to navigate the site, use the EXACT label names shown below (NOT the English originals):
+  • The button in the top navigation is labeled "Kontakt aufnehmen" (NOT "Get In Touch")
+  • The contact section is labeled "Kontakt" (NOT "Contact")
+  • The services section is labeled "Leistungen" (NOT "Services")
+  • The how-it-works section is labeled "So funktioniert's" (NOT "How It Works")
+  • The FAQ section is labeled "FAQ"
+  • The home link is labeled "Start" (NOT "Home")
+Example: instead of "Click 'Get In Touch'", say "Klicken Sie auf 'Kontakt aufnehmen'".`
       : "";
 
   const encoder = new TextEncoder();
