@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import ReactMarkdown from "react-markdown";
 import { useTranslation } from "./LanguageProvider";
 
 interface Message {
@@ -20,7 +21,6 @@ export default function Chatbot() {
   const [retryAfter, setRetryAfter] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  // Honeypot — kept out of view, only bots will fill it
   const honeypotRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -42,7 +42,6 @@ export default function Chatbot() {
     }
   }, [open]);
 
-  // Tick down retry-after countdown
   useEffect(() => {
     if (retryAfter <= 0) return;
     const id = setInterval(() => {
@@ -54,10 +53,8 @@ export default function Chatbot() {
   function rateLimitMessage(reason: string, seconds: number): string {
     if (reason === "rate_limit_minute")
       return t.chatbot.rateLimitMinute.replace("{s}", String(seconds));
-    if (reason === "rate_limit_hour")
-      return t.chatbot.rateLimitHour;
-    if (reason === "rate_limit_day")
-      return t.chatbot.rateLimitDay;
+    if (reason === "rate_limit_hour") return t.chatbot.rateLimitHour;
+    if (reason === "rate_limit_day") return t.chatbot.rateLimitDay;
     return t.chatbot.rateLimitGeneric;
   }
 
@@ -98,7 +95,6 @@ export default function Chatbot() {
         throw new Error(rateLimitMessage(data.error || "", seconds));
       }
 
-      // 403 with error "banned" → permanent (until timer expires) block
       if (res.status === 403) {
         const data = await res.json().catch(() => ({}));
         if (data.error === "banned") {
@@ -134,9 +130,9 @@ export default function Chatbot() {
     } catch (err) {
       const msg = err instanceof Error ? err.message : t.chatbot.errorGeneric;
       setError(msg);
-      // Remove the empty assistant placeholder on error
       setMessages((prev) =>
-        prev[prev.length - 1]?.role === "assistant" && prev[prev.length - 1].content === ""
+        prev[prev.length - 1]?.role === "assistant" &&
+        prev[prev.length - 1].content === ""
           ? prev.slice(0, -1)
           : prev
       );
@@ -163,7 +159,7 @@ export default function Chatbot() {
 
   return (
     <>
-      {/* Floating launcher button */}
+      {/* Floating launcher */}
       <button
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? "Close chat" : "Open chat"}
@@ -217,19 +213,61 @@ export default function Chatbot() {
               className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
             >
               <div
-                className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-[14px] leading-relaxed whitespace-pre-wrap ${
+                className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-[14px] leading-relaxed ${
                   m.role === "user"
-                    ? "bg-violet-600 text-white rounded-br-md"
-                    : "bg-white/[0.06] border border-white/10 text-white/90 rounded-bl-md"
+                    ? "bg-violet-600 text-white rounded-br-md whitespace-pre-wrap"
+                    : "bg-white/[0.06] border border-white/10 text-white/90 rounded-bl-md chat-md"
                 }`}
               >
-                {m.content}
-                {m.role === "assistant" && loading && idx === messages.length - 1 && !m.content && (
-                  <span className="inline-flex gap-1">
-                    <span className="h-1.5 w-1.5 rounded-full bg-violet-300 animate-bounce" style={{ animationDelay: "0ms" }} />
-                    <span className="h-1.5 w-1.5 rounded-full bg-violet-300 animate-bounce" style={{ animationDelay: "150ms" }} />
-                    <span className="h-1.5 w-1.5 rounded-full bg-violet-300 animate-bounce" style={{ animationDelay: "300ms" }} />
-                  </span>
+                {m.role === "assistant" ? (
+                  m.content ? (
+                    <ReactMarkdown
+                      components={{
+                        a: ({ children, ...props }) => (
+                          <a
+                            {...props}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-violet-300 underline hover:text-violet-200"
+                          >
+                            {children}
+                          </a>
+                        ),
+                        strong: ({ children }) => (
+                          <strong className="font-semibold text-white">{children}</strong>
+                        ),
+                        em: ({ children }) => <em className="italic">{children}</em>,
+                        ul: ({ children }) => (
+                          <ul className="list-disc pl-5 my-2 space-y-0.5">{children}</ul>
+                        ),
+                        ol: ({ children }) => (
+                          <ol className="list-decimal pl-5 my-2 space-y-0.5">{children}</ol>
+                        ),
+                        li: ({ children }) => <li className="leading-snug">{children}</li>,
+                        p: ({ children }) => <p className="my-1.5 first:mt-0 last:mb-0">{children}</p>,
+                        code: ({ children }) => (
+                          <code className="px-1.5 py-0.5 rounded bg-violet-500/15 border border-violet-500/30 text-violet-200 text-[13px] font-mono">
+                            {children}
+                          </code>
+                        ),
+                        h1: ({ children }) => <div className="font-semibold text-white text-base mt-2 mb-1">{children}</div>,
+                        h2: ({ children }) => <div className="font-semibold text-white text-base mt-2 mb-1">{children}</div>,
+                        h3: ({ children }) => <div className="font-semibold text-white mt-2 mb-1">{children}</div>,
+                      }}
+                    >
+                      {m.content}
+                    </ReactMarkdown>
+                  ) : (
+                    loading && idx === messages.length - 1 && (
+                      <span className="inline-flex gap-1">
+                        <span className="h-1.5 w-1.5 rounded-full bg-violet-300 animate-bounce" style={{ animationDelay: "0ms" }} />
+                        <span className="h-1.5 w-1.5 rounded-full bg-violet-300 animate-bounce" style={{ animationDelay: "150ms" }} />
+                        <span className="h-1.5 w-1.5 rounded-full bg-violet-300 animate-bounce" style={{ animationDelay: "300ms" }} />
+                      </span>
+                    )
+                  )
+                ) : (
+                  m.content
                 )}
               </div>
             </div>
@@ -244,7 +282,6 @@ export default function Chatbot() {
 
         {/* Input */}
         <form onSubmit={onSubmit} className="p-3 border-t border-white/10 bg-black/40">
-          {/* Honeypot — visually hidden but present in DOM. Bots fill it; humans don't. */}
           <input
             ref={honeypotRef}
             type="text"
