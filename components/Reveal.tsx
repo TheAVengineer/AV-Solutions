@@ -10,12 +10,10 @@ export default function Reveal({
   children,
   delay = 0,
   className = "",
-  as: Tag = "div",
 }: {
   children: ReactNode;
   delay?: number;
   className?: string;
-  as?: keyof JSX.IntrinsicElements;
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [visible, setVisible] = useState(false);
@@ -36,14 +34,13 @@ export default function Reveal({
     return () => observer.disconnect();
   }, []);
 
-  // @ts-expect-error — generic tag with ref
   return (
-    <Tag
+    <div
       ref={ref}
       className={`reveal ${visible ? "visible" : ""} ${className}`}
       style={{ transitionDelay: `${delay}ms` }}
     >
       {children}
-    </Tag>
+    </div>
   );
 }
