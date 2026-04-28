@@ -5,16 +5,24 @@ import { getCalApi } from "@calcom/embed-react";
 
 /**
  * Initializes Cal.com embed once per page load.
- * Visit cal.com to manage event types — change CAL_LINK below to point at
- * a different one (e.g. "avsolutions/15min" for a quick chat option).
+ * Visit cal.com (or cal.eu) to manage event types — change CAL_LINK below
+ * to point at a different one (e.g. "avsolutions/15min" for a quick chat).
+ *
+ * If you're on cal.eu (EU users — Cal.com routes EU accounts there for
+ * GDPR), keep CAL_ORIGIN as "https://cal.eu". For US accounts use
+ * "https://cal.com".
  */
 export const CAL_LINK = "avsolutions/30min";
 export const CAL_NAMESPACE = "consultation";
+export const CAL_ORIGIN = "https://cal.eu";
 
 export default function CalProvider() {
   useEffect(() => {
     (async () => {
-      const cal = await getCalApi({ namespace: CAL_NAMESPACE });
+      const cal = await getCalApi({
+        namespace: CAL_NAMESPACE,
+        embedJsUrl: `${CAL_ORIGIN}/embed/embed.js`,
+      });
       cal("ui", {
         theme: "dark",
         cssVarsPerTheme: {
@@ -39,12 +47,13 @@ export default function CalProvider() {
 }
 
 /**
- * Props that turn any button/anchor into a Cal.com modal trigger.
- * Spread {...calButtonProps} onto a <button> or <a> to wire it up.
+ * Spread {...calButtonProps} onto a <button> or <a> to wire it up
+ * as a Cal.com modal trigger.
  */
 export const calButtonProps = {
   "data-cal-link": CAL_LINK,
   "data-cal-namespace": CAL_NAMESPACE,
+  "data-cal-origin": CAL_ORIGIN,
   "data-cal-config": JSON.stringify({
     layout: "month_view",
     theme: "dark",
