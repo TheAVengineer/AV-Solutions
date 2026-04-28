@@ -2,6 +2,7 @@
 
 import { useTranslation } from "./LanguageProvider";
 import ConnectionGraph from "./ConnectionGraph";
+import { calButtonProps } from "./CalProvider";
 
 export default function Hero() {
   const { t } = useTranslation();
@@ -41,9 +42,9 @@ export default function Hero() {
           className="mt-12 flex justify-center animate-fade-in-up"
           style={{ animationDelay: "0.2s", opacity: 0 }}
         >
-          <a href="#contact" className="btn-primary">
+          <button {...calButtonProps} className="btn-primary">
             {t.hero.cta}
-          </a>
+          </button>
         </div>
 
         <div

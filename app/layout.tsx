@@ -4,6 +4,7 @@ import "./globals.css";
 import Spotlight from "@/components/Spotlight";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import Chatbot from "@/components/Chatbot";
+import CalProvider from "@/components/CalProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -79,6 +80,7 @@ export default function RootLayout({
     <html lang="en" className={inter.variable}>
       <body className="font-sans text-white antialiased">
         <LanguageProvider>
+          <CalProvider />
           <Spotlight />
           {children}
           <Chatbot />

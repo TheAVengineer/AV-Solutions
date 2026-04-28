@@ -5,6 +5,7 @@ import { useTranslation } from "./LanguageProvider";
 import { SERVICE_SLUGS } from "@/lib/translations";
 import GlowCard from "./GlowCard";
 import Reveal from "./Reveal";
+import { calButtonProps } from "./CalProvider";
 
 export default function Services() {
   const { t } = useTranslation();
@@ -102,9 +103,9 @@ export default function Services() {
             </p>
 
             <div className="mt-10">
-              <a href="#contact" className="btn-primary">
+              <button {...calButtonProps} className="btn-primary">
                 {t.services.cta}
-              </a>
+              </button>
             </div>
           </div>
         </Reveal>

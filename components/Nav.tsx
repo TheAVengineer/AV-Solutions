@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Logo from "./Logo";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useTranslation } from "./LanguageProvider";
+import { calButtonProps } from "./CalProvider";
 
 export default function Nav() {
   const { t } = useTranslation();
@@ -63,9 +64,9 @@ export default function Nav() {
         {/* Right side: Language + CTA */}
         <div className="hidden lg:flex items-center gap-3">
           <LanguageSwitcher />
-          <a href="#contact" className="btn-primary">
+          <button {...calButtonProps} className="btn-primary">
             {t.nav.cta}
-          </a>
+          </button>
         </div>
 
         {/* Mobile toggle */}
@@ -101,9 +102,9 @@ export default function Nav() {
                 {l.label}
               </a>
             ))}
-            <a href="#contact" className="btn-primary justify-center mt-2" onClick={() => setOpen(false)}>
+            <button {...calButtonProps} className="btn-primary justify-center mt-2" onClick={() => setOpen(false)}>
               {t.nav.cta}
-            </a>
+            </button>
           </div>
         </div>
       )}

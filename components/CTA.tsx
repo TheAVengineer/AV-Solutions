@@ -3,6 +3,7 @@
 import { useTranslation } from "./LanguageProvider";
 import ConnectionGraph from "./ConnectionGraph";
 import Reveal from "./Reveal";
+import { calButtonProps } from "./CalProvider";
 
 export default function CTA() {
   const { t } = useTranslation();
@@ -38,12 +39,9 @@ export default function CTA() {
               </p>
 
               <div className="mt-10">
-                <a
-                  href="mailto:contact@avsolutions.dev?subject=AV%20Solutions%20Consultation"
-                  className="btn-primary"
-                >
+                <button {...calButtonProps} className="btn-primary">
                   {t.cta.button}
-                </a>
+                </button>
               </div>
             </div>
           </div>
