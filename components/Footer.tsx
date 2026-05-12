@@ -1,7 +1,9 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import Logo from "./Logo";
 import { useTranslation } from "./LanguageProvider";
+import { openCookieBanner } from "./CookieConsent";
 
 // ─── SOCIAL LINKS ───────────────────────────────────────────────────────────
 const SOCIAL_LINKS = {
@@ -13,6 +15,8 @@ const SOCIAL_LINKS = {
 
 export default function Footer() {
   const { t } = useTranslation();
+  const pathname = usePathname();
+  const home = pathname === "/" ? "" : "/";
 
   return (
     <footer className="relative pt-20 pb-10 px-6 border-t border-white/5">
@@ -35,11 +39,11 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-medium mb-4">{t.footer.pages}</h4>
             <ul className="space-y-3 text-sm text-white/55">
-              <li><a href="#top" className="hover:text-white">{t.nav.home}</a></li>
-              <li><a href="#services" className="hover:text-white">{t.nav.services}</a></li>
-              <li><a href="#how-it-works" className="hover:text-white">{t.nav.howItWorks}</a></li>
-              <li><a href="#faq" className="hover:text-white">{t.nav.faq}</a></li>
-              <li><a href="#contact" className="hover:text-white">{t.nav.contact}</a></li>
+              <li><a href={`${home}#top`} className="hover:text-white">{t.nav.home}</a></li>
+              <li><a href={`${home}#services`} className="hover:text-white">{t.nav.services}</a></li>
+              <li><a href={`${home}#how-it-works`} className="hover:text-white">{t.nav.howItWorks}</a></li>
+              <li><a href={`${home}#faq`} className="hover:text-white">{t.nav.faq}</a></li>
+              <li><a href={`${home}#contact`} className="hover:text-white">{t.nav.contact}</a></li>
             </ul>
           </div>
 
@@ -53,7 +57,7 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#contact" className="hover:text-white">
+                <a href={`${home}#contact`} className="hover:text-white">
                   {t.footer.sendMessage}
                 </a>
               </li>
@@ -112,6 +116,16 @@ export default function Footer() {
             <a href="/terms" className="hover:text-white">{t.footer.terms}</a>
             <span className="text-white/20">|</span>
             <a href="/privacy" className="hover:text-white">{t.footer.privacy}</a>
+            <span className="text-white/20">|</span>
+            <a href="/imprint" className="hover:text-white">{t.footer.imprint}</a>
+            <span className="text-white/20">|</span>
+            <button
+              type="button"
+              onClick={openCookieBanner}
+              className="hover:text-white"
+            >
+              {t.footer.cookieSettings}
+            </button>
           </div>
         </div>
       </div>

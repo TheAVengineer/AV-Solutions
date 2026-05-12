@@ -10,11 +10,12 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.1",
+    "@calcom/embed-react": "^1.5.1",
+    "@vercel/analytics": "^2.0.1",
     "next": "14.2.15",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-markdown": "^9.0.1",
-    "@calcom/embed-react": "^1.5.1"
+    "react-markdown": "^9.0.1"
   },
   "devDependencies": {
     "@types/node": "^20",

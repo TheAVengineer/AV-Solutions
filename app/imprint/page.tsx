@@ -1,16 +1,16 @@
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import TermsContent from "./TermsContent";
+import ImprintContent from "./ImprintContent";
 
 export const metadata = {
-  title: "Terms of Service",
+  title: "Imprint",
 };
 
-export default function TermsPage() {
+export default function ImprintPage() {
   return (
     <main className="min-h-screen relative">
       <Nav />
-      <TermsContent />
+      <ImprintContent />
       <Footer />
     </main>
   );

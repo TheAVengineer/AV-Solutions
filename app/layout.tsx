@@ -5,6 +5,8 @@ import Spotlight from "@/components/Spotlight";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import Chatbot from "@/components/Chatbot";
 import CalProvider from "@/components/CalProvider";
+import CookieConsent from "@/components/CookieConsent";
+import ConsentAnalytics from "@/components/ConsentAnalytics";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -84,6 +86,8 @@ export default function RootLayout({
           <Spotlight />
           {children}
           <Chatbot />
+          <CookieConsent />
+          <ConsentAnalytics />
         </LanguageProvider>
       </body>
     </html>
