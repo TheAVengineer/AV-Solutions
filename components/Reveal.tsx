@@ -22,12 +22,18 @@ export default function Reveal({
     const el = ref.current;
     if (!el) return;
 
+    // If the page loaded with a hash anchor (e.g. /#services, /#contact),
+    // the user arrived mid-page and expects to see the content immediately.
+    // The IntersectionObserver can't reliably tell what's "in view" during
+    // the initial hash-scroll, so just reveal everything on hash loads.
+    if (typeof window !== "undefined" && window.location.hash && window.location.hash !== "#top") {
+      setVisible(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Reveal when intersecting OR when already scrolled past
-        // (page loaded with /#services or similar — element is above
-        // the viewport so isIntersecting is false but it should be visible).
-        if (entry.isIntersecting || entry.boundingClientRect.bottom <= 0) {
+        if (entry.isIntersecting) {
           setVisible(true);
           observer.disconnect();
         }
@@ -35,23 +41,7 @@ export default function Reveal({
       { threshold: 0.12, rootMargin: "0px 0px -60px 0px" }
     );
     observer.observe(el);
-
-    // Re-check after the browser has finished any hash-scroll / scroll
-    // restoration. The initial observer fire can race against scroll-to-hash
-    // and report isIntersecting=false even when the element is in/above view.
-    const raf = requestAnimationFrame(() => {
-      const rect = el.getBoundingClientRect();
-      const vh = window.innerHeight || document.documentElement.clientHeight;
-      if (rect.top <= vh * 0.9) {
-        setVisible(true);
-        observer.disconnect();
-      }
-    });
-
-    return () => {
-      cancelAnimationFrame(raf);
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, []);
 
   return (
