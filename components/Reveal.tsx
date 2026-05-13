@@ -22,16 +22,12 @@ export default function Reveal({
     const el = ref.current;
     if (!el) return;
 
-    const rect = el.getBoundingClientRect();
-    const viewportH = window.innerHeight || document.documentElement.clientHeight;
-    if (rect.top < viewportH * 0.9) {
-      setVisible(true);
-      return;
-    }
-
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        // Reveal when intersecting OR when already scrolled past
+        // (page loaded with /#services or similar — element is above
+        // the viewport so isIntersecting is false but it should be visible).
+        if (entry.isIntersecting || entry.boundingClientRect.bottom <= 0) {
           setVisible(true);
           observer.disconnect();
         }
@@ -39,7 +35,23 @@ export default function Reveal({
       { threshold: 0.12, rootMargin: "0px 0px -60px 0px" }
     );
     observer.observe(el);
-    return () => observer.disconnect();
+
+    // Re-check after the browser has finished any hash-scroll / scroll
+    // restoration. The initial observer fire can race against scroll-to-hash
+    // and report isIntersecting=false even when the element is in/above view.
+    const raf = requestAnimationFrame(() => {
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      if (rect.top <= vh * 0.9) {
+        setVisible(true);
+        observer.disconnect();
+      }
+    });
+
+    return () => {
+      cancelAnimationFrame(raf);
+      observer.disconnect();
+    };
   }, []);
 
   return (
