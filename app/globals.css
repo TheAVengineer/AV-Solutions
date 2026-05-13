@@ -257,17 +257,6 @@ body > * {
   z-index: 0;
 }
 
-/* ─── Reveal-on-scroll utility ─────────────────────────────────────────── */
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
 /* ─── Card & UI styles ──────────────────────────────────────────────────── */
 .gradient-card {
   background-image:
